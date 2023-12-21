@@ -5,7 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-import HibernateDTO.Student;
+import hibernateDTO.Student;
 
 public class Driver {
 
