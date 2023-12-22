@@ -45,16 +45,18 @@ public class PersonDAO
 		return findedPerson;
 	}
 	
-	public Person updatePerson(Person person)
+	public Person updatePerson(Person person,int id)
 	{
 		EntityManager entityManager = DmlOperations.getEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
-		Person updatePerson = entityManager.find(Person.class, person.getpId());
+		Person updatePerson = entityManager.find(Person.class, id);
 		if(updatePerson != null)
 		{
+			person.setpId(id);
 			transaction.begin();
-			entityManager.merge(updatePerson);
+			entityManager.merge(person);
 			transaction.commit();
+			return person;
 		}
 		return updatePerson;
 	}
