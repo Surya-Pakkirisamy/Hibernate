@@ -1,30 +1,32 @@
 package hibernateDAO;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 import hibernateDTO.Addhaar;
 
 public class AddhaarDAO 
 {
-	public static Addhaar findAddhaar(int id)
+	EntityManagerFactory EntityManagerFactory = Persistence.createEntityManagerFactory("surya");
+	EntityManager EntityManager = EntityManagerFactory.createEntityManager();
+	EntityTransaction transaction = EntityManager.getTransaction();
+	
+	public Addhaar findAddhaar(int id)
 	{
-		EntityManager entityManager = DmlOperations.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
-		Addhaar findedAddhaar = entityManager.find(Addhaar.class,id);
+		Addhaar findedAddhaar = EntityManager.find(Addhaar.class,id);
 		transaction.commit();
 		return findedAddhaar;
 		
 	}
 	public Addhaar insertAddhaar(Addhaar addhaar)
 	{
-		EntityManager entityManager = DmlOperations.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
 		if(addhaar != null)
 		{
 		transaction.begin();
-		entityManager.persist(addhaar);
+		EntityManager.persist(addhaar);
 		transaction.commit();
 		}
 		return addhaar;
@@ -33,28 +35,26 @@ public class AddhaarDAO
 	
 	public Addhaar deleteAddhaar(int id)
 	{
-		EntityManager entityManager = DmlOperations.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		Addhaar findedAddhaar = entityManager.find(Addhaar.class, id);
+		Addhaar findedAddhaar = findAddhaar(id);
 		if(findedAddhaar != null)
 		{
 			transaction.begin();
-			entityManager.remove(findedAddhaar);
+			EntityManager.remove(findedAddhaar);
 			transaction.commit();
 		}
 		return findedAddhaar;
 	}
 	
-	public Addhaar updateAddhaar(Addhaar addhaar)
+	public Addhaar updateAddhaar(Addhaar addhaar,int id)
 	{
-		EntityManager entityManager = DmlOperations.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		Addhaar updateAddhaar = entityManager.find(Addhaar.class, addhaar.getAddharNumber());
+		Addhaar updateAddhaar = findAddhaar(id);
 		if(updateAddhaar != null)
 		{
+			addhaar.setAddharNumber(id);
 			transaction.begin();
-			entityManager.merge(updateAddhaar);
+			EntityManager.merge(addhaar);
 			transaction.commit();
+			return addhaar;
 		}
 		return updateAddhaar;
 	}
