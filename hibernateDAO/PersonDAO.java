@@ -1,64 +1,62 @@
 package hibernateDAO;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 import hibernateDTO.Person;
 
 public class PersonDAO 
 {
-	public static Person findPerson(int id)
+	
+	EntityManagerFactory EntityManagerFactory = Persistence.createEntityManagerFactory("surya");
+	EntityManager EntityManager = EntityManagerFactory.createEntityManager();
+	EntityTransaction transaction = EntityManager.getTransaction();
+	
+	public Person findPerson(int id)
 	{
-		EntityManager entityManager = DmlOperations.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
-		Person findedPerson = entityManager.find(Person.class,id);
+		Person findedPerson = EntityManager.find(Person.class,id);
 		transaction.commit();
 		return findedPerson;
 		
 	}
-	public Person insertPerson(Person person)
+	public Person insertPerson(Person Person)
 	{
-		EntityManager entityManager = DmlOperations.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		if(person != null)
+		if(Person != null)
 		{
 		transaction.begin();
-		entityManager.persist(person);
+		EntityManager.persist(Person);
 		transaction.commit();
 		}
-		return person;
+		return Person;
 	}
 	
 	
 	public Person deletePerson(int id)
 	{
-		EntityManager entityManager = DmlOperations.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		Person findedPerson = entityManager.find(Person.class, id);
+		Person findedPerson = findPerson(id);
 		if(findedPerson != null)
 		{
 			transaction.begin();
-			entityManager.remove(findedPerson);
+			EntityManager.remove(findedPerson);
 			transaction.commit();
 		}
 		return findedPerson;
 	}
 	
-	public Person updatePerson(Person person,int id)
+	public Person updatePerson(Person Person,int id)
 	{
-		EntityManager entityManager = DmlOperations.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		Person updatePerson = entityManager.find(Person.class, id);
+		Person updatePerson = findPerson(id);
 		if(updatePerson != null)
 		{
-			person.setpId(id);
+			Person.setpId(id);
 			transaction.begin();
-			entityManager.merge(person);
+			EntityManager.merge(Person);
 			transaction.commit();
-			return person;
+			return Person;
 		}
 		return updatePerson;
 	}
-
 }
